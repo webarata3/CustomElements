@@ -16,6 +16,21 @@
     --font-monospace: monospace;
   }
 
+  .background {
+    display: none;
+  }
+
+  .background.choosing {
+    z-index: 5;
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #0006;
+  }
+
   .root {
     position: relative;
   }
@@ -23,18 +38,12 @@
   label {
     display: inline-block;
     cursor: pointer;
-    padding: 3px 8px 3px 2rem;
+    padding: 2px 8px;
     border: 1px solid #333;
     border-radius: 3px;
     color: var(--primary-color);
-    border: 1px solid var(--primary-color);
+    border: 1px solid #999;
     background-color: #fff;
-  }
-
-  label::before {
-    background-image: url("${CLOCK_ICON}");
-    width: 2rem;
-    height: 2rem;
   }
 
   label:hover {
@@ -58,9 +67,8 @@
     top: 0;
     left: 0;
     background-color: #fff;
-    border: 1px solid #999;
-    padding: 5px;
-    box-shadow: 0 0 5px #666;
+    padding: 15px;
+    border-radius: 5px;
     z-index: 10;
   }
 
@@ -97,7 +105,7 @@
 
   .hour-buttons > div, .minute-buttons > div {
     text-align: right;
-    border-radius: 3px;
+    border-radius: 50%;
     padding: 4px;
     margin: 3px;
   }
@@ -108,6 +116,8 @@
     background-color: var(--primary-color);
   }
   </style>
+  <div class="background">
+  </div>
   <span class="root">
    <label>時刻の設定</label>
    <div class="dialog">
@@ -166,14 +176,17 @@
       this.$label = shadowRoot.querySelector('label');
       this.$input = shadowRoot.querySelector('input');
       this.$dialog = shadowRoot.querySelector('.dialog');
+      this.$background = shadowRoot.querySelector('.background');
       this.$label.addEventListener('click', () => {
         this.$label.classList.add('choosing');
         this.$dialog.classList.add('choosing');
+        this.$background.classList.add('choosing');
       });
-      document.addEventListener('click', e => {
+      this.$background.addEventListener('click', e => {
         if (e.target !== this) {
           this.$label.classList.remove('choosing');
           this.$dialog.classList.remove('choosing');
+          this.$background.classList.remove('choosing');
         }
       });
       shadowRoot.querySelectorAll('.hour-buttons > div').forEach(button => {
