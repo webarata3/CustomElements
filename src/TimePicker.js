@@ -266,7 +266,7 @@
         }
       });
       shadowRoot.querySelector('#ok-button').addEventListener('click', () => {
-        this.closeDialog();
+        this.ok();
       });
       shadowRoot.querySelector('#cancel-button').addEventListener('click', () => {
         this.cancel();
@@ -283,6 +283,11 @@
           this.setMinute(button.textContent);
         });
       });
+    }
+
+    ok() {
+      this.initTime = this.$input.value;
+      this.closeDialog();
     }
 
     cancel() {
@@ -333,7 +338,6 @@
         this.$label.textContent = INIT_MESSAGE;
       } else {
         this.$label.textContent = time;
-        this.initTime = time;
       }
     }
 
