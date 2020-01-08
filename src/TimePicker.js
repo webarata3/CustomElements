@@ -103,23 +103,23 @@
     color: #ecf0f1;
     transition: background-color .3s;
   }
-  
+
   .button:hover, .button:focus {
     background-color: #27ae60;
   }
-  
+
   .button > * {
     position: relative;
   }
-  
+
   .button span {
     display: block;
     padding: 3px 10px;
   }
-  
+
   .button:before {
     content: '';
-    
+
     position: absolute;
     top: 50%;
     left: 50%;
@@ -130,11 +130,11 @@
     background-color: rgba(236, 240, 241, .3);
     transform: translate(-50%, -50%);
   }
-  
+
   .button:active:before {
     width: 120%;
     padding-top: 120%;
-    
+
     transition: width .2s ease-out, padding-top .2s ease-out;
   }
 
@@ -181,7 +181,7 @@
     text-align: right;
     border-radius: 50%;
     padding: 4px;
-    margin: 3px; 
+    margin: 3px;
   }
 
   .hour-buttons > div:hover, .minute-buttons > div:hover {
@@ -250,55 +250,56 @@
    </div>
   </span>
   `;
-      this.initTime = '';
-      this.$label = shadowRoot.querySelector('label');
-      this.$input = shadowRoot.querySelector('input');
-      this.$dialog = shadowRoot.querySelector('.dialog');
-      this.$background = shadowRoot.querySelector('.background');
-      this.$label.addEventListener('click', () => {
-        this.$label.classList.add('choosing');
-        this.$dialog.classList.add('choosing');
-        this.$background.classList.add('choosing');
+      this._initTime = '';
+      this._$label = shadowRoot.querySelector('label');
+      this._$input = shadowRoot.querySelector('input');
+      this._$dialog = shadowRoot.querySelector('.dialog');
+      this._$background = shadowRoot.querySelector('.background');
+      this._$label.addEventListener('click', () => {
+        this._$label.classList.add('choosing');
+        this._$dialog.classList.add('choosing');
+        this._$background.classList.add('choosing');
       });
-      this.$background.addEventListener('click', e => {
+      this._$background.addEventListener('click', e => {
         if (e.target !== this) {
-          this.cancel();
+          this._cancel();
         }
       });
       shadowRoot.querySelector('#ok-button').addEventListener('click', () => {
-        this.ok();
+        this._ok();
       });
       shadowRoot.querySelector('#cancel-button').addEventListener('click', () => {
-        this.cancel();
+        this._cancel();
       });
       shadowRoot.querySelectorAll('.hour-buttons > div').forEach(button => {
         button.addEventListener('click', e => {
-          this.activeInput();
-          this.setHour(button.textContent);
+          this._activeInput();
+          this._setHour(button.textContent);
         });
       });
       shadowRoot.querySelectorAll('.minute-buttons > div').forEach(button => {
         button.addEventListener('click', () => {
-          this.activeInput();
-          this.setMinute(button.textContent);
+          this._activeInput();
+          this._setMinute(button.textContent);
         });
       });
     }
 
-    ok() {
-      this.initTime = this.$input.value;
-      this.closeDialog();
+    _ok() {
+      this._initTime = this._$input.value;
+      this._setTime(this._initTime);
+      this._closeDialog();
     }
 
-    cancel() {
-      this.setTime(this.initTime);
-      this.closeDialog();
+    _cancel() {
+      this._setTime(this.initTime);
+      this._closeDialog();
     }
 
-    closeDialog() {
-      this.$label.classList.remove('choosing');
-      this.$dialog.classList.remove('choosing');
-      this.$background.classList.remove('choosing');
+    _closeDialog() {
+      this._$label.classList.remove('choosing');
+      this._$dialog.classList.remove('choosing');
+      this._$background.classList.remove('choosing');
     }
 
     static get observedAttributes() {
@@ -310,54 +311,54 @@
         case 'value':
           const result = newVal.match(/^([01]?[0-9]|2[0-3]):([0-5][0-9])$/);
           if (result === null) {
-            this.initTime = '';
+            this._initTime = '';
           } else {
-            this.initTime = `${result[1].padStart('0', 2)}:${result[2].padStart('0', 2)}`;
+            this._initTime = `${result[1].padStart('0', 2)}:${result[2].padStart('0', 2)}`;
           }
-          this.setTime(this.initTime);
+          this._setTime(this._initTime);
           break;
       }
     }
 
-    activeInput() {
-      if (this.timer) {
-        clearTimeout(this.timer);
+    _activeInput() {
+      if (this._timer) {
+        clearTimeout(this._timer);
       }
 
       const event = new MouseEvent('click');
-      this.$input.dispatchEvent(event);
-      this.$input.classList.add('active');
-      this.timer = setTimeout(() => {
-        this.$input.classList.remove('active');
+      this._$input.dispatchEvent(event);
+      this._$input.classList.add('active');
+      this._timer = setTimeout(() => {
+        this._$input.classList.remove('active');
       }, INPUT_ANIMATION_MILLS);
     }
 
-    setTime(time) {
-      this.$input.value = time;
+    _setTime(time) {
+      this._$input.value = time;
       if (time.length === 0) {
-        this.$label.textContent = INIT_MESSAGE;
+        this._$label.textContent = INIT_MESSAGE;
       } else {
-        this.$label.textContent = time;
+        this._$label.textContent = time;
       }
     }
 
-    setHour(hour) {
+    _setHour(hour) {
       const padHour = hour.padStart(2, '0');
-      const times = this.$input.value.split(':');
+      const times = this._$input.value.split(':');
       if (times.length === 2) {
-        this.setTime(`${padHour}:${times[1]}`);
+        this._setTime(`${padHour}:${times[1]}`);
       } else {
-        this.setTime(`${padHour}:00`);
+        this._setTime(`${padHour}:00`);
       }
     }
 
-    setMinute(minute) {
+    _setMinute(minute) {
       const padMinute = minute.padStart(2, '0');
-      const times = this.$input.value.split(':');
+      const times = this._$input.value.split(':');
       if (times.length === 2) {
-        this.setTime(`${times[0]}:${padMinute}`);
+        this._setTime(`${times[0]}:${padMinute}`);
       } else {
-        this.setTime(`00:${padMinute}`);
+        this._setTime(`00:${padMinute}`);
       }
     }
   }
