@@ -42,10 +42,9 @@
     display: inline-block;
     cursor: pointer;
     padding: 2px 8px;
-    border: 1px solid #333;
+    border: 1px solid #999;
     border-radius: 3px;
     color: var(--primary-color);
-    border: 1px solid #999;
     background-color: #fff;
   }
 
