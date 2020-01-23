@@ -131,27 +131,27 @@ input:hover ~ label > .calendar-icon {
 `;
       const $input = shadowRoot.querySelector('input');
       $input.addEventListener('change', event => {
-        this.setNewDate(event.currentTarget.value);
+        this._setNewDate(event.currentTarget.value);
       });
       shadowRoot.querySelector('.clear-button').addEventListener('click', () => {
-        this.setNewDate('');
+        this._setNewDate('');
       });
     }
 
     static get observedAttributes() {
-      return ['rfc3339'];
+      return ['value'];
     }
 
     attributeChangedCallback(attrName, oldVal, newVal) {
       switch (attrName) {
-        case 'rfc3339':
+        case 'value':
           // ここからセットするのは最初の一回だけ
-          this.setDate(newVal);
+          this._setDate(newVal);
           break;
       }
     }
 
-    setDate(newVal) {
+    _setDate(newVal) {
       const checkDate = Date.parse(newVal);
       const $root = this.shadowRoot.querySelector('.root');
       const $label = this.shadowRoot.querySelector('.view-date');
@@ -161,59 +161,31 @@ input:hover ~ label > .calendar-icon {
       } else {
         const parseDate = new Date(checkDate);
         const date = `${parseDate.getFullYear()}-${zeroPadding(
-          parseDate.getMonth() + 1,
-          2
-        )}-${zeroPadding(parseDate.getDate(), 2)}`;
+          parseDate.getMonth() + 1
+        )}-${zeroPadding(parseDate.getDate())}`;
         this.shadowRoot.querySelector('input[type=date]').value = date;
         $root.classList.add('selected');
-        $label.textContent = `${parseDate.getFullYear()}-${zeroPadding(
-          parseDate.getMonth() + 1,
-          2
-        )}-${zeroPadding(parseDate.getDate(), 2)}`;
+        $label.textContent = toNormalizeDate(date)
       }
     }
 
     // 初回以外で日付が変更されたとき
-    setNewDate(newVal) {
-      this.setDate(newVal);
-      const rfc3339String = newVal ? `${newVal}T00:00:00.000Z` : '';
+    _setNewDate(newVal) {
+      this._setDate(newVal);
       this.dispatchEvent(
         new CustomEvent('dateChange', {
-          detail: rfc3339String
+          detail: toNormalizeDate(newVal)
         })
       );
     }
   }
 
-  function zeroPadding(num, length) {
-    return ('0000000000' + num).slice(-length);
+  function toNormalizeDate(date) {
+    return date.replace(/-/g, '/');
   }
 
-  function getRgbColor(color) {
-    const trimColor = color.trim();
-    if (trimColor.length === 0) {
-      return '';
-    }
-    if (trimColor.substring(0, 1) !== '#') {
-      return trimColor;
-    }
-    if (trimColor.length === 4) {
-      const color1 = trimColor.substring(1, 2);
-      const color2 = trimColor.substring(2, 3);
-      const color3 = trimColor.substring(3, 4);
-      return `rgb(${toDecColor(color1)}, ${toDecColor(color2)}, ${toDecColor(color3)})`
-    }
-    if (trimColor.length === 7) {
-      return `rgb(${toDecColor(trimColor.substring(1, 3))}, ${toDecColor(trimColor.substring(3, 5))}, ${toDecColor(trimColor.substring(5, 7))})`
-    }
-    return trimColor;
-  }
-
-  function toDecColor(hexColor) {
-    if (hexColor.length === 2) {
-      return parseInt(hexColor, 16);
-    }
-    return parseInt(hexColor + hexColor, 16);
+  function zeroPadding(num) {
+    return String(num).padStart(2, '0');
   }
 
   customElements.define('date-picker', DatePicker);

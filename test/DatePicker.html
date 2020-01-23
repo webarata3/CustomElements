@@ -4,8 +4,17 @@
   <meta charset="utf-8">
   <title>DatePickerテスト</title>
   <script defer src="../src/DatePicker.js"></script>
+  <script>
+   window.addEventListener('DOMContentLoaded', (event) => {
+    document.querySelector('#date1').addEventListener('dateChange', e => {
+     console.log(e.detail);
+    });
+   });
+  </script>
  </head>
  <body>
+  <date-picker id="date1"></date-picker>
+  <date-picker></date-picker>
   <date-picker></date-picker>
  </body>
 </html>
