@@ -6,14 +6,14 @@
   <script defer src="../src/DatePicker.js"></script>
   <script>
    window.addEventListener('DOMContentLoaded', (event) => {
-    document.querySelector('#date1').addEventListener('dateChange', e => {
-     console.log(e.detail);
+    document.querySelector('#date1').addEventListener('input', e => {
+     console.log(e, e.target.value);
     });
    });
   </script>
  </head>
  <body>
-  <date-picker id="date1"></date-picker>
+  <date-picker id="date1"></date-picker><br>
   <date-picker></date-picker>
   <date-picker></date-picker>
  </body>

@@ -21,7 +21,7 @@
   --input-date-height: calc(var(--component-size) + var(--label-padding-height) * 2 + 2px);
 }
 
-* {
+*, *::before, *::after {
   box-sizing: border-box;
 }
 
@@ -36,6 +36,7 @@
   position: relative;
   padding: 0;
   margin: 0;
+  vertical-align: top;
 }
 
 input[type=date] {
@@ -60,7 +61,6 @@ input[type=date]::-webkit-datetime-edit {
 
 input[type=date]::-webkit-calendar-picker-indicator,
 input[type=date]::-webkit-calendar-picker-indicator:hover {
-  opacity: 0.5;
   cursor: pointer;
   position: absolute;
   width: 100%;
@@ -115,7 +115,7 @@ input:hover ~ label > .calendar-icon {
 
 .selected .clear-button {
   display: inline-block;
-  width: var(--component-size);
+  width: calc(var(--component-size) + var(--clear-button-margin));
   height: var(--input-date-height);
   background: url(${DELETE_IMG});
   background-size: var(--component-size) var(--component-size);
@@ -123,6 +123,7 @@ input:hover ~ label > .calendar-icon {
   background-position: center;
   margin-left: var(--clear-button-margin);
   cursor: pointer;
+  vertical-align: top;
 }
 </style>
 <span class="root">
@@ -145,7 +146,6 @@ input:hover ~ label > .calendar-icon {
     attributeChangedCallback(attrName, oldVal, newVal) {
       switch (attrName) {
         case 'value':
-          // ここからセットするのは最初の一回だけ
           this._setDate(newVal);
           break;
       }
@@ -171,12 +171,9 @@ input:hover ~ label > .calendar-icon {
 
     // 初回以外で日付が変更されたとき
     _setNewDate(newVal) {
+      console.log(this);
+      this.setAttribute('value', newVal);
       this._setDate(newVal);
-      this.dispatchEvent(
-        new CustomEvent('dateChange', {
-          detail: toNormalizeDate(newVal)
-        })
-      );
     }
   }
 
