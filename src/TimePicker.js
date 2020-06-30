@@ -177,7 +177,7 @@
   }
 
   .hour-buttons > div, .minute-buttons > div {
-    text-align: right;
+    text-align: center;
     border-radius: 50%;
     padding: 4px;
     margin: 3px;
