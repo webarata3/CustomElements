@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+ <head>
+  <meta charset="utf-8">
+  <title>RadarChartのテスト</title>
+  <script defer src="../src/TimePicker.js"></script>
+ </head>
+ <body>
+  <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300">
+   <polygon id="test" fill="#99f8" />
+   <line x1="150" y1="150" x2="250" y2="150" stroke="black" stroke-width="1" />
+   <line x1="150" y1="150" x2="200" y2="236" stroke="black" stroke-width="1" />
+   <line x1="150" y1="150" x2="200" y2="63" stroke="black" stroke-width="1" />
+   <line x1="150" y1="150" x2="100" y2="236" stroke="black" stroke-width="1" />
+   <line x1="150" y1="150" x2="50" y2="150" stroke="black" stroke-width="1" />
+   <line x1="150" y1="150" x2="100" y2="63" stroke="black" stroke-width="1" />
+  </svg>
+  <script>
+   const values = [100, 90, 80, 30, 20, 95];
+   let points = "";
+   for (let i = 0; i < 6; i++) {
+    const x = Math.floor(Math.cos(((60 * i) - 90) * Math.PI / 180) * values[i]);
+    const y = Math.floor(Math.sin(((60 * i) - 90) * Math.PI / 180) * values[i]);
+    points = points + `${x + 150},${y + 150} `;
+   }
+
+   const $svg = document.querySelector('#test');
+   $svg.setAttribute('points', points);
+  </script>
+ </body>
+</html>
