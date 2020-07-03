@@ -3,29 +3,9 @@
  <head>
   <meta charset="utf-8">
   <title>RadarChartのテスト</title>
-  <script defer src="../src/TimePicker.js"></script>
+  <script defer src="../src/RadarChart.js"></script>
  </head>
  <body>
-  <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300">
-   <polygon id="test" fill="#99f8" />
-   <line x1="150" y1="150" x2="237" y2="200" stroke="black" stroke-width="1" />
-   <line x1="150" y1="150" x2="150" y2="250" stroke="black" stroke-width="1" />
-   <line x1="150" y1="150" x2="63" y2="200" stroke="black" stroke-width="1" />
-   <line x1="150" y1="150" x2="63" y2="100" stroke="black" stroke-width="1" />
-   <line x1="150" y1="150" x2="150" y2="50" stroke="black" stroke-width="1" />
-   <line x1="150" y1="150" x2="236" y2="100" stroke="black" stroke-width="1" />
-  </svg>
-  <script>
-   const values = [100, 90, 80, 30, 20, 95];
-   let points = "";
-   for (let i = 0; i < 6; i++) {
-    const x = Math.floor(Math.cos(((60 * i) - 90) * Math.PI / 180) * values[i]);
-    const y = Math.floor(Math.sin(((60 * i) - 90) * Math.PI / 180) * values[i]);
-    points = points + `${x + 150},${y + 150} `;
-   }
-
-   const $svg = document.querySelector('#test');
-   $svg.setAttribute('points', points);
-  </script>
+  <radar-chart width="400" height="400" values="120 90 80 70 67 99"></radar-chart>
  </body>
 </html>
