@@ -37,6 +37,7 @@
       shadowRoot.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg"></svg>`;
       this._$svg = shadowRoot.querySelector('svg');
       this._initSvgSize();
+      this._initTitles();
       this._initValues();
 
       this._drawBaseLines();
@@ -55,8 +56,12 @@
       }
     }
 
+    _initTitles() {
+      this._titles = this.getAttribute('titles').split(',');
+    }
+
     _initValues() {
-      this._values = this.getAttribute('values').split(' ').map(v => parseInt(v, 10));
+      this._values = this.getAttribute('values').split(',').map(v => parseInt(v, 10));
       this._valueCount = this._values.length;
       this._valueAngle = 360 / this._valueCount;
     }
