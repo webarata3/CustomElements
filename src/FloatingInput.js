@@ -2,6 +2,8 @@
 ((global) => {
   'use strict';
 
+  const CSS_VAR_PREFIX = 'floating-input';
+
   class FloatingInput extends HTMLElement {
     static get formAssociated() { return true; }
 
@@ -11,7 +13,12 @@
       shadowRoot.innerHTML = `
 <style>
 :host {
-  --main-color: var(--floating-input-main-color, #007bff);
+  --main-color: var(--${CSS_VAR_PREFIX}_main-color, #007bff);
+  --label-color: var(--${CSS_VAR_PREFIX}_label-color, #999);
+  --input-background-color: var(--${CSS_VAR_PREFIX}_input-background-color, transparent);
+  --input-background-color-focus: var(--${CSS_VAR_PREFIX}_input-background-color-focus, transparent);
+
+  display: inline-block;
 }
 
 *, *::before, *::after {
@@ -27,17 +34,20 @@ label, input {
 }
 
 label {
-  font-size: 0.8rem;
+  color: var(--label-color);
+  font-size: 0.7rem;
   position: absolute;
   top: 1em;
   left: 5px;
 }
 
 input {
+  width: 100%;
   border-width: 0;
   border-bottom: 1px solid #999;
   margin-top: 1em;
-  padding: 10px 5px;
+  padding: 5px;
+  background-color: var(--input-background-color);
 }
 
 input:focus {
@@ -63,27 +73,31 @@ input:focus::-webkit-input-placeholder {
   opacity: 1;
 }
 
+input:focus {
+  background-color: var(--input-background-color-focus);
+}
+
 input:not(:placeholder-shown) + label,
 input:focus + label {
   color: var(--main-color);
-  transform: translate(0, -10px) scale(1);
+  transform: translate(0, -12px) scale(1);
   cursor: pointer;
 }
 </style>
 <div>
- <input type="text" id="floating" placeholder="ああああ">
+ <input type="text" id="floating" placeholder="&nbsp;">
  <label for="floating">名前</label>
 </div>
 `;
       this._value = '';
-      const $input = shadowRoot.querySelector('input');
-      $input.addEventListener('input', event => {
-        //    this._setNewDate(event.currentTarget.value);
-      });
+      this._$input = shadowRoot.querySelector('input');
+      // $input.addEventListener('input', event => {
+      //   //    this._setNewDate(event.currentTarget.value);
+      // });
     }
 
     static get observedAttributes() {
-      return ['value'];
+      return ['placeholder'];
     }
 
     // get form() { return this._internals.form; }
@@ -93,10 +107,14 @@ input:focus + label {
 
     attributeChangedCallback(attrName, oldVal, newVal) {
       switch (attrName) {
-        case 'value':
-          this._setDate(newVal);
+        case 'placeholder':
+          this._setPlaceholder(newVal);
           break;
       }
+    }
+
+    _setPlaceholder(placeholder) {
+      this._$input.setAttribute('placeholder', placeholder);
     }
   }
 
