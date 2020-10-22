@@ -4,7 +4,7 @@
 
   const CSS_VAR_PREFIX = 'floating-input';
 
-  class FloatingInput extends HTMLElement {
+  class FloatingInput extends HTMLlement {
     static get formAssociated() { return true; }
 
     constructor() {
