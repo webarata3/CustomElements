@@ -3,15 +3,7 @@
   'use strict';
 
   const CSS_VAR_PREFIX = 'floating-input';
-
-  class FloatingInput extends HTMLlement {
-    static get formAssociated() { return true; }
-
-    constructor() {
-      super();
-      const shadowRoot = this.attachShadow({ mode: 'open' });
-      shadowRoot.innerHTML = `
-<style>
+  const CSS = `
 :host {
   --main-color: var(--${CSS_VAR_PREFIX}_main-color, #007bff);
   --label-color: var(--${CSS_VAR_PREFIX}_label-color, #999);
@@ -82,18 +74,41 @@ input:focus + label {
   color: var(--main-color);
   transform: translate(0, -12px) scale(1);
   cursor: pointer;
-}
-</style>
-<div>
- <input type="text" id="floating" placeholder="&nbsp;">
- <label for="floating">名前</label>
-</div>
-`;
+}`;
+
+  class FloatingInput extends HTMLElement {
+    static get formAssociated() { return true; }
+
+    constructor() {
+      super();
+      const shadowRoot = this.attachShadow({ mode: 'open' });
+      this._createElm(shadowRoot);
+
       this._value = '';
       this._$input = shadowRoot.querySelector('input');
       // $input.addEventListener('input', event => {
       //   //    this._setNewDate(event.currentTarget.value);
       // });
+    }
+
+    _createElm(shadowRoot) {
+      const styleElm = document.createElement('style');
+      styleElm.textContent = CSS;
+      shadowRoot.appendChild(styleElm);
+
+      const wrapperElm = document.createElement('div');
+      const inputElm = document.createElement('input');
+      inputElm.setAttribute('type', 'text');
+      inputElm.setAttribute('id', 'floating');
+      inputElm.setAttribute('placeholder', '&nbsp;');
+      wrapperElm.appendChild(inputElm);
+
+      const labelElm = document.createElement('label');
+      labelElm.textContent = '名前';
+      labelElm.setAttribute('for', 'floating');
+      wrapperElm.appendChild(labelElm);
+
+      shadowRoot.appendChild(wrapperElm);
     }
 
     static get observedAttributes() {
