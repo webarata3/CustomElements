@@ -23,6 +23,7 @@ div {
 
 label, input {
   transition: all 0.2s;
+  font-size: inherit;
 }
 
 label {
