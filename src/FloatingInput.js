@@ -82,14 +82,16 @@ input:focus + label {
 
     constructor() {
       super();
+      this._internals = this.attachInternals();
+      this._internals.setFormValue("");
       const shadowRoot = this.attachShadow({ mode: 'open' });
       this._createElm(shadowRoot);
 
       this._value = '';
       this._$input = shadowRoot.querySelector('input');
-      // $input.addEventListener('input', event => {
-      //   //    this._setNewDate(event.currentTarget.value);
-      // });
+      this._$input.addEventListener('input', event => {
+        this._internals.setFormValue(event.currentTarget.value);
+      });
     }
 
     _createElm(shadowRoot) {
