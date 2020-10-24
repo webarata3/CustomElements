@@ -1,4 +1,5 @@
 // https://momdo.github.io/html/custom-elements.html
+// http://var.blog.jp/archives/80336361.html
 ((global) => {
   'use strict';
 
