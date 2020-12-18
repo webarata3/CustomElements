@@ -11,6 +11,8 @@
   --input-background-color: var(--${CSS_VAR_PREFIX}_input-background-color, transparent);
   --input-background-color-focus: var(--${CSS_VAR_PREFIX}_input-background-color-focus, transparent);
 
+  --top-margin: 10px;
+
   display: inline-block;
 }
 
@@ -31,7 +33,6 @@ label {
   color: var(--label-color);
   font-size: 1em;
   position: absolute;
-  top: 5px;
   left: 5px;
 }
 
@@ -39,7 +40,7 @@ input {
   width: 100%;
   border-width: 0;
   border-bottom: 1px solid #999;
-  margin-top: 0.8em;
+  margin-top: calc(var(--top-margin) + 10px);
   padding: 5px;
   background-color: var(--input-background-color);
 }
@@ -55,7 +56,7 @@ input:placeholder-shown + label {
   overflow: hidden;
   text-overflow: ellipsis;
   transform-origin: left bottom;
-  transform: translate(0, 0.8em) scale(1.25);
+  top: calc(var(--top-margin) + 15px);
 }
 
 ::-webkit-input-placeholder {
@@ -74,8 +75,9 @@ input:focus {
 input:not(:placeholder-shown) + label,
 input:focus + label {
   color: var(--main-color);
-  transform: translate(0, -1.1em) scale(0.7);
+  top: 0;
   cursor: pointer;
+  font-size: 8px;
 }`;
 
   class FloatingInput extends HTMLElement {
