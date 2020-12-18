@@ -39,7 +39,7 @@ input {
   width: 100%;
   border-width: 0;
   border-bottom: 1px solid #999;
-  margin-top: 0.6em;
+  margin-top: 0.8em;
   padding: 5px;
   background-color: var(--input-background-color);
 }
