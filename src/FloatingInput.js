@@ -29,9 +29,9 @@ label, input {
 
 label {
   color: var(--label-color);
-  font-size: 0.7rem;
+  font-size: 1em;
   position: absolute;
-  top: 1em;
+  top: 5px;
   left: 5px;
 }
 
@@ -39,7 +39,7 @@ input {
   width: 100%;
   border-width: 0;
   border-bottom: 1px solid #999;
-  margin-top: 1em;
+  margin-top: 0.6em;
   padding: 5px;
   background-color: var(--input-background-color);
 }
@@ -74,7 +74,7 @@ input:focus {
 input:not(:placeholder-shown) + label,
 input:focus + label {
   color: var(--main-color);
-  transform: translate(0, -12px) scale(1);
+  transform: translate(0, -1.1em) scale(0.7);
   cursor: pointer;
 }`;
 
@@ -90,6 +90,7 @@ input:focus + label {
 
       this._value = '';
       this._$input = shadowRoot.querySelector('input');
+      this._$label = shadowRoot.querySelector('label');
       this._$input.addEventListener('input', event => {
         this._internals.setFormValue(event.currentTarget.value);
       });
@@ -108,7 +109,6 @@ input:focus + label {
       wrapperElm.appendChild(inputElm);
 
       const labelElm = document.createElement('label');
-      labelElm.textContent = '名前';
       labelElm.setAttribute('for', 'floating');
       wrapperElm.appendChild(labelElm);
 
@@ -116,7 +116,7 @@ input:focus + label {
     }
 
     static get observedAttributes() {
-      return ['placeholder'];
+      return ['label', 'placeholder'];
     }
 
     // get form() { return this._internals.form; }
@@ -126,10 +126,17 @@ input:focus + label {
 
     attributeChangedCallback(attrName, oldVal, newVal) {
       switch (attrName) {
+        case 'label':
+          this._setLabel(newVal);
+          break;
         case 'placeholder':
           this._setPlaceholder(newVal);
           break;
       }
+    }
+
+    _setLabel(label) {
+      this._$label.textContent = label;
     }
 
     _setPlaceholder(placeholder) {
